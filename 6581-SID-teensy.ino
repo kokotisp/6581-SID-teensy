@@ -47,8 +47,6 @@ AudioPlaySID             playSID1;  //xy=189,110
 AudioOutputAnalogStereo           dacs;           //xy=366,111
 AudioConnection          patchCord1(playSID, 0, dacs, 0);
 AudioConnection          patchCord2(playSID1, 0, dacs, 1);
-//AudioOutputAnalog          dac1;           //xy=366,111
-//AudioConnection          patchCord1(playSID, 0, dac1, 0);
 
 // GUItool: end automatically generated code
 
@@ -65,7 +63,7 @@ void setup() {
   }
  // Attach an interrupt when RW goes LOW. Seems to work well.
 attachInterrupt(digitalPinToInterrupt(RW), blink, LOW);
-  //playSID.begin();
+  
 }
 
 void loop() {
