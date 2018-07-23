@@ -16,7 +16,7 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
 */
 
-//COMPILED WITH FASTEST + PURE CODE
+//COMPILED @216mHz overclocked + FASTEST + PURE CODE
 
 #include <Audio.h>
 #include <Wire.h>
@@ -26,7 +26,8 @@
 
 const byte CS = 11;
 const byte RW = 12;
-const byte Α5 = 13;
+//Connect 13 pin of teensy to pin 12 of commodore cpu (Via a level shifter of cource)
+const byte A05 = 13;
 
 
   #define PORTC_PDIR GPIOC_PDIR
@@ -62,7 +63,7 @@ void setup() {
     pinMode(portPinsD[a], INPUT);
   }
  // Attach an interrupt when RW goes LOW. Seems to work well.
-attachInterrupt(digitalPinToInterrupt(RW), blink, LOW);
+attachInterrupt(digitalPinToInterrupt(RW), ReadLines, LOW);
   
 }
 
@@ -74,7 +75,7 @@ uint8_t address_lines;
 uint8_t data_lines;
 
 
-void blink() {
+void ReadLines() {
 
 // Reading address and data lines of sid chip
      address_lines = PORTC_PDIR ;//& B00011111 ;
@@ -82,12 +83,17 @@ void blink() {
 
       // If both RW and CS signals are LOW 
       if ((address_lines &  B11000000) < 0x01 ){
-      // Send data to reSID. At this point sound is pseudo-stereo meaning both channels play the same tones. But there are plans for dual sid.
+        //Check if note is for SID at $d4200
+        if ((address_lines &  B00100000) < 0x01){
+      // Send data to reSID. 
         playSID.setreg(address_lines &  B00011111 ,data_lines);
+       // playSID1.setreg(address_lines &  B00011111 ,data_lines);
+      }
+      else {
         playSID1.setreg(address_lines &  B00011111 ,data_lines);
       }
   }
-
+}
  
  
 
