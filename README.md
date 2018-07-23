@@ -1,2 +1,2 @@
 # 6581-SID-teensy
-6581 SID Emulator using teensy 3.6
+Dual 6581 SID Emulator using teensy 3.6
